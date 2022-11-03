@@ -4,7 +4,7 @@ import {getConnection} from "../database/database"
 const getProducts = async (req, resp) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("select idProducto, Nombre, Precio, Descripcion from producto");
+        const result = await connection.query("select idProducto, Modelo, Descripcion, Precio, Cantidad from producto");
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -15,10 +15,9 @@ const getProducts = async (req, resp) => {
 //Devuelve resultado por parametro 
 const getProduct = async (req, resp) => {
     try {
-        console.log("este es mi con: ",req.params);
         const {idProducto} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("select Nombre, Precio, Descripcion from Producto where idProducto = ?", idProducto);
+        const result = await connection.query("select idProducto, Modelo, Descripcion, Precio, Cantidad from producto where idProducto = ?", idProducto);
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -28,15 +27,15 @@ const getProduct = async (req, resp) => {
 
 const addProduct = async (req, resp) => {
     try {
-        const {Nombre, Precio, Descripcion} = req.body;
+        const {Modelo, Descripcion, Precio, Cantidad, Fk_idMarca, FK_idTallas} = req.body;
 
-        if(Nombre === undefined || Precio === undefined  || Descripcion === undefined){
+        if(Modelo === undefined || Descripcion === undefined || Precio === undefined || Cantidad === undefined){
             resp.status(400).json({message: "Mala petición. favor rellena todos los campos"});
 
         }
-        const Usuario_idCliente = 1;
+    
         const producto = {
-            Nombre, Precio, Usuario_idCliente, Descripcion
+            Modelo, Descripcion, Precio, Cantidad, Fk_idMarca, FK_idTallas
         };
 
         const connection = await getConnection();
@@ -53,13 +52,13 @@ const updateProduct = async (req, resp) => {
     try {
         console.log(req.params);
         const {idProducto} = req.params;
-        const {Titulo, Precio} = req.body;
+        const {Modelo, Descripcion, Precio, Cantidad} = req.body;
 
         if (Titulo === undefined || Precio === undefined) {
             resp.status(400).json({ message: "Bad Request. Please fill all field." });
         }
 
-        const producto = {Titulo, Precio, Descripcion};
+        const producto = {Modelo, Descripcion, Precio, Cantidad};
         const connection = await getConnection();
         const result = await connection.query("UPDATE producto SET ? WHERE idProducto = ?", [producto, idProducto]);
         console.log(idProducto);

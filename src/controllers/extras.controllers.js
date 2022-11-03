@@ -1,10 +1,10 @@
 import {getConnection} from "../database/database";
 
 //Devuelve todos los usuarios
-const getUsers = async (req, resp) => {
+const getExtras = async (req, resp) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("select * from usuario");
+        const result = await connection.query("select * from extras");
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -13,12 +13,12 @@ const getUsers = async (req, resp) => {
 };
 
 //Devuelve el usuario según el parámetro
-const getUser = async (req, resp) => {
+const getExtra = async (req, resp) => {
     try {
         console.log("este es mi con: ",req.params);
-        const {idUsuario} = req.params;
+        const {idExtras} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("select * from usuario where idUsuario = ?", idUsuario);
+        const result = await connection.query("select * from extras where idExtras = ?", idExtras);
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -26,22 +26,22 @@ const getUser = async (req, resp) => {
     }
 };
 
-const addUser = async (req, resp) => {
+const addExtras = async (req, resp) => {
     try {
-        const {Nombres, ApellidoP, ApellidoM} = req.body;
+        const {Celular, Correo} = req.body;
 
-        if(Nombres === undefined || ApellidoP === undefined || ApellidoM === undefined){
+        if(Celular === undefined || Correo === undefined){
             resp.status(400).json({message: "Mala petición. favor rellena todos los campos"});
 
         }
-        
-        const usuario = {
-            Nombres, ApellidoP, ApellidoM
+        const Fk_Usuario = 1;
+        const exUsuario = {
+            Celular, Correo, Fk_Usuario
         };
 
         const connection = await getConnection();
-        await connection.query("insert into usuario set ?", usuario);
-        resp.json({message: "Usuario Agregado"})
+        await connection.query("insert into extras set ?", exUsuario);
+        resp.json({message: "Datos Agregados"})
         
     } catch (error) {
         resp.status(500);
@@ -49,20 +49,20 @@ const addUser = async (req, resp) => {
     }
 };
 
-const updateUser = async (req, resp) => {
+const updateExtras = async (req, resp) => {
     try {
         console.log(req.params);
-        const {idUsuario} = req.params;
-        const {Nombres, ApellidoP, ApellidoM} = req.body;
+        const {idExtras} = req.params;
+        const {Celular, Correo} = req.body;
 
         if (Nombres === undefined || ApellidoP === undefined || ApellidoM === undefined) {
             resp.status(400).json({ message: "Bad Request. Please fill all field." });
         }
 
-        const usuario = {Nombres, ApellidoP, ApellidoM};
+        const Extras = {Celular, Correo};
         const connection = await getConnection();
-        const result = await connection.query("UPDATE usuario SET ? WHERE idUsuario = ?", [usuario, idUsuario]);
-        console.log(idUsuario);
+        const result = await connection.query("UPDATE extras SET ? WHERE idExtras = ?", [Extras, idExtras]);
+        console.log(idExtras);
         
         resp.json(result);
     } catch (error) {
@@ -71,12 +71,12 @@ const updateUser = async (req, resp) => {
     }
 };
 
-const deleteUser = async (req, resp) => {
+const deleteExtras = async (req, resp) => {
     try {
         console.log(req.params);
-        const {idUsuario} = req.params;
+        const {idExtras} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("delete from usuario where idUsuario = ?", idUsuario);
+        const result = await connection.query("delete from extras where idExtras = ?", idExtras);
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -85,9 +85,9 @@ const deleteUser = async (req, resp) => {
 };
 
 export const methods = {
-    getUsers,
-    getUser,
-    addUser,
-    updateUser,
-    deleteUser
+    getExtras,
+    getExtra,
+    addExtras,
+    updateExtras,
+    deleteExtras
 };

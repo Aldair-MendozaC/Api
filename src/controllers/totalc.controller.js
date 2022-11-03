@@ -1,10 +1,10 @@
 import {getConnection} from "../database/database";
 
 //Devuelve todos los usuarios
-const getUsers = async (req, resp) => {
+const getTotales = async (req, resp) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("select * from usuario");
+        const result = await connection.query("select * from totaldecompra");
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -13,12 +13,12 @@ const getUsers = async (req, resp) => {
 };
 
 //Devuelve el usuario según el parámetro
-const getUser = async (req, resp) => {
+const getTotal = async (req, resp) => {
     try {
         console.log("este es mi con: ",req.params);
-        const {idUsuario} = req.params;
+        const {idTotalDeCompra} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("select * from usuario where idUsuario = ?", idUsuario);
+        const result = await connection.query("select * from totaldecompra where idTotalDeCompra = ?", idTotalDeCompra);
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -26,7 +26,7 @@ const getUser = async (req, resp) => {
     }
 };
 
-const addUser = async (req, resp) => {
+const addTotal = async (req, resp) => {
     try {
         const {Nombres, ApellidoP, ApellidoM} = req.body;
 
@@ -40,7 +40,7 @@ const addUser = async (req, resp) => {
         };
 
         const connection = await getConnection();
-        await connection.query("insert into usuario set ?", usuario);
+        await connection.query("insert into totaldecompra set ?", usuario);
         resp.json({message: "Usuario Agregado"})
         
     } catch (error) {
@@ -49,10 +49,10 @@ const addUser = async (req, resp) => {
     }
 };
 
-const updateUser = async (req, resp) => {
+const updateTotal = async (req, resp) => {
     try {
         console.log(req.params);
-        const {idUsuario} = req.params;
+        const {totaldecompra} = req.params;
         const {Nombres, ApellidoP, ApellidoM} = req.body;
 
         if (Nombres === undefined || ApellidoP === undefined || ApellidoM === undefined) {
@@ -61,8 +61,7 @@ const updateUser = async (req, resp) => {
 
         const usuario = {Nombres, ApellidoP, ApellidoM};
         const connection = await getConnection();
-        const result = await connection.query("UPDATE usuario SET ? WHERE idUsuario = ?", [usuario, idUsuario]);
-        console.log(idUsuario);
+        const result = await connection.query("UPDATE totaldecompra SET ? WHERE idTotalDeCompra = ?", [usuario, totaldecompra]);
         
         resp.json(result);
     } catch (error) {
@@ -71,12 +70,12 @@ const updateUser = async (req, resp) => {
     }
 };
 
-const deleteUser = async (req, resp) => {
+const deleteTotal = async (req, resp) => {
     try {
         console.log(req.params);
-        const {idUsuario} = req.params;
+        const {idTotalDeCompra} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("delete from usuario where idUsuario = ?", idUsuario);
+        const result = await connection.query("delete from totaldecompra where idUsuario = ?", idTotalDeCompra);
         resp.json(result);
     } catch (error) {
         resp.status(500);
@@ -85,9 +84,9 @@ const deleteUser = async (req, resp) => {
 };
 
 export const methods = {
-    getUsers,
-    getUser,
-    addUser,
-    updateUser,
-    deleteUser
+    getTotales,
+    getTotal,
+    addTotal,
+    updateTotal,
+    deleteTotal
 };
