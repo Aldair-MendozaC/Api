@@ -1,6 +1,6 @@
 import {getConnection} from "../database/database";
 
-//Devuelve todos los usuarios
+//Devuelve todos los extras
 const getExtras = async (req, resp) => {
     try {
         const connection = await getConnection();
@@ -12,7 +12,7 @@ const getExtras = async (req, resp) => {
     }
 };
 
-//Devuelve el usuario según el parámetro
+//Devuelve el extra según el parámetro
 const getExtra = async (req, resp) => {
     try {
         console.log("este es mi con: ",req.params);

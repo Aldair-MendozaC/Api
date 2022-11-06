@@ -52,16 +52,16 @@ const addTotal = async (req, resp) => {
 const updateTotal = async (req, resp) => {
     try {
         console.log(req.params);
-        const {totaldecompra} = req.params;
-        const {Nombres, ApellidoP, ApellidoM} = req.body;
+        const {idTotalDeCompra} = req.params;
+        const {TotalDeCompracol, OrdenCompra_idOrdenCompra} = req.body;
 
-        if (Nombres === undefined || ApellidoP === undefined || ApellidoM === undefined) {
+        if (TotalDeCompracol === undefined || OrdenCompra_idOrdenCompra === undefined) {
             resp.status(400).json({ message: "Bad Request. Please fill all field." });
         }
 
-        const usuario = {Nombres, ApellidoP, ApellidoM};
+        const totalC = {TotalDeCompracol, OrdenCompra_idOrdenCompra};
         const connection = await getConnection();
-        const result = await connection.query("UPDATE totaldecompra SET ? WHERE idTotalDeCompra = ?", [usuario, totaldecompra]);
+        const result = await connection.query("UPDATE totaldecompra SET ? WHERE idTotalDeCompra = ?", [usuario, idTotalDeCompra]);
         
         resp.json(result);
     } catch (error) {
@@ -75,7 +75,7 @@ const deleteTotal = async (req, resp) => {
         console.log(req.params);
         const {idTotalDeCompra} = req.params;
         const connection = await getConnection();
-        const result = await connection.query("delete from totaldecompra where idUsuario = ?", idTotalDeCompra);
+        const result = await connection.query("delete from totaldecompra where idTotalDeCompra = ?", idTotalDeCompra);
         resp.json(result);
     } catch (error) {
         resp.status(500);

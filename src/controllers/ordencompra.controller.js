@@ -3,13 +3,13 @@ import {getConnection} from "../database/database";
 //Devuelve el carrito de compras, por
 const getOrdenCompra = async (req, resp) => {
     try {
-        const {idOrdenCompra} = req.params;
+        //const {idOrdenCompra} = req.params;
         const connection = await getConnection();
         //var sql = 'SELECT usuario.Nombre, ApellidoPaterno, ApellidoMaterno, producto.nombre Precio ' +
          //'FROM Usuario ' +
          //'INNER JOIN Producto ON Usuario.idUsuario = Producto.Usuario_idCliente ' +
          //'where usuario.idUsuario = ?';
-        const result = await connection.query("Select * from ordencompra where idOrdenCompra = ?", idOrdenCompra);
+        const result = await connection.query("Select * from ordencompra");
         resp.json(result);
         console.log(result);
     } catch (error) {
@@ -20,15 +20,24 @@ const getOrdenCompra = async (req, resp) => {
 
 const addOrdenCompra = async (req, resp) => {
     try {
-        const {Modelo, Descripcion, Precio, Cantidad} = req.body;
-        console.log("este es mi con: ",req.params);
-        if(Modelo === undefined || Descripcion === undefined || Precio === undefined || Cantidad === undefined){
+        const {Total, Unidades, Fecha} = req.body;
+        //console.log("este es mi con: ",req.params);
+        if(Total === undefined || Unidades === undefined || Fecha === undefined){
             resp.status(400).json({message: "Mala petición. favor rellena todos los campos"});
 
         }
+
+        const FK_idUsuario = 1;
+        const FK_idProdcuto = 2; 
+        const FK_idTallas = 1;
+        const orden = {
+            FK_idUsuario, FK_idProdcuto, FK_idTallas, Total, Unidades, Fecha
+        };
+
         const connection = await getConnection();
-        const result = await connection.query("select Nombre, Precio, Descripcion from Producto where idProducto = ?", idProducto);
-        resp.json(result);
+        await connection.query("insert into ordencompra set ?", orden);
+        resp.json({message: "Orden Compra registrada"})
+        console.log(Fecha)
     } catch (error) {
         resp.status(500);
         resp.send(error.message);

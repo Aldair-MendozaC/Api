@@ -4,6 +4,7 @@ import { methods as regController } from "../controllers/registro.controller";
 const routerRe = Router();
 
 
+routerRe.get("/", regController.getRegistro);
 routerRe.post("/", regController.addRegistro);
 
 
