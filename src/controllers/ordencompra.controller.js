@@ -3,12 +3,7 @@ import {getConnection} from "../database/database";
 //Devuelve el carrito de compras, por
 const getOrdenCompra = async (req, resp) => {
     try {
-        //const {idOrdenCompra} = req.params;
         const connection = await getConnection();
-        //var sql = 'SELECT usuario.Nombre, ApellidoPaterno, ApellidoMaterno, producto.nombre Precio ' +
-         //'FROM Usuario ' +
-         //'INNER JOIN Producto ON Usuario.idUsuario = Producto.Usuario_idCliente ' +
-         //'where usuario.idUsuario = ?';
         const result = await connection.query("Select * from ordencompra");
         resp.json(result);
         console.log(result);

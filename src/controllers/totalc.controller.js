@@ -15,7 +15,6 @@ const getTotales = async (req, resp) => {
 //Devuelve el usuario según el parámetro
 const getTotal = async (req, resp) => {
     try {
-        console.log("este es mi con: ",req.params);
         const {idTotalDeCompra} = req.params;
         const connection = await getConnection();
         const result = await connection.query("select * from totaldecompra where idTotalDeCompra = ?", idTotalDeCompra);
@@ -28,19 +27,20 @@ const getTotal = async (req, resp) => {
 
 const addTotal = async (req, resp) => {
     try {
-        const {Nombres, ApellidoP, ApellidoM} = req.body;
+        const {TotalDeCompracol} = req.body;
 
-        if(Nombres === undefined || ApellidoP === undefined || ApellidoM === undefined){
+        if(TotalDeCompracol === undefined){
             resp.status(400).json({message: "Mala petición. favor rellena todos los campos"});
 
         }
         
-        const usuario = {
-            Nombres, ApellidoP, ApellidoM
+        const OrdenCompra_idOrdenCompra =1;
+        const ordenC = {
+            TotalDeCompracol, OrdenCompra_idOrdenCompra
         };
 
         const connection = await getConnection();
-        await connection.query("insert into totaldecompra set ?", usuario);
+        await connection.query("insert into totaldecompra set ?", ordenC);
         resp.json({message: "Usuario Agregado"})
         
     } catch (error) {
